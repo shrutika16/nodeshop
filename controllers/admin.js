@@ -62,3 +62,44 @@ exports.getEditProduct = (req, res, next) => {
       console.log(err);
     });
 }
+
+exports.editProduct = (req, res, next) => {
+    const prodId = req.body.productId;
+    const updatedTitle = req.body.title;
+    const updatedDescription = req.body.description;
+    const updatedImageUrl = req.body.imageUrl;
+    const updatedPrice = req.body.price;
+
+  Product.findByPk(prodId)
+    .then(product => {
+      product.title = updatedTitle;
+      product.description = updatedDescription;
+      product.price = updatedPrice;
+      product.imageUrl = updatedImageUrl;
+      product.save();
+    })
+    .then(result => {
+      console.log('UPDATED PRODUCT!');
+      res.redirect('/admin/products');
+    })
+    .catch(
+        err => {
+            console.log(err)
+    });
+}
+
+
+exports.deleteProduct = (req, res, next) => {
+  const prodId = req.body.productId;
+  console.log(prodId);
+    Product.findByPk(prodId)
+    .then(product => {
+      return product.destroy();
+    }).then(result => {
+      console.log('DESTROYED PRODUCT');
+      res.redirect('/admin/products');
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
