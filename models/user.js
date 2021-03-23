@@ -9,6 +9,7 @@ const User = sequelize.define('user', {
         primaryKey: true,
         autoIncrement: true
     },
+    name: Sequelize.STRING,
     email : {
         type: Sequelize.DataTypes.STRING,
         allowNull: false,
@@ -18,7 +19,7 @@ const User = sequelize.define('user', {
         allowNull: false,
     },
 }, {
-    timestamps: false,
+    // timestamps: false,
     tableName: 'user'
 });
 

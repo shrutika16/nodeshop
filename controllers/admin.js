@@ -1,7 +1,8 @@
 const Product = require('../models/product');
 
 exports.getProducts = (req, res, next) => { 
-    Product.findAll()
+    // Product.findAll()
+  req.user.getProducts()
     .then(products => {
       res.render('admin/products', {
         prods: products,
@@ -27,13 +28,12 @@ exports.postAddProducts = (req, res, next) => {
     const description = req.body.description;
     const imageUrl = req.body.imageUrl;
     const price = req.body.price;
-
-    Product.create({
-        title: title,
-        description: description,
-        price: price,
-        imageUrl: imageUrl
-    }).then(result => {
+  req.user.createProduct({
+      title: title,
+      description: description,
+      price: price,
+      imageUrl: imageUrl
+  }).then(result => {
         console.log('Created Product');
       res.redirect('/admin/products');
     }).catch(
@@ -48,7 +48,6 @@ exports.getEditProduct = (req, res, next) => {
         return res.redirect('/');
     }
     const prodId = req.params.productId;
-    console.log(prodId)
     Product.findByPk(prodId)
     .then(product => {
       res.render('admin/edit-product', {
@@ -91,7 +90,6 @@ exports.editProduct = (req, res, next) => {
 
 exports.deleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  console.log(prodId);
     Product.findByPk(prodId)
     .then(product => {
       return product.destroy();
