@@ -1,6 +1,4 @@
-const Product = require('../models/product');
-const Cart = require('../models/cart');
-const Order = require('../models/order');
+const models = require('../models');
 // const User = require('../models/user');
 // const rp = require('request-promise');
 // const url = 'https://unsold.com/';
@@ -31,7 +29,7 @@ const Order = require('../models/order');
 
 
 exports.getIndex = (req, res, next) => {
-  Product.findAll()
+  models.Product.findAll()
     .then(products => {
       res.render('shop/index', {
         prods: products,
@@ -45,7 +43,7 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getproducts = (req, res, next) => {
-  Product.findAll()
+  models.Product.findAll()
     .then(products => {
       res.render('shop/product-list', {
         prods: products,
@@ -60,7 +58,7 @@ exports.getproducts = (req, res, next) => {
 
 exports.getproduct = (req, res, next) => {
   const prodID = req.params.productId;
-  Product.findByPk(prodID)
+  models.Product.findByPk(prodID)
     .then(product => {
       res.render('shop/product-detail', {
         product: product,
@@ -97,7 +95,13 @@ exports.postCart = (req, res, next) => {
   req.user.getCart()
     .then(cart => {
       featchedCart = cart;
-      return cart.getProducts({ where: { id: prodId } });
+      // console.log('products');
+      // console.log(cart.getProducts());
+      const products = cart.getProducts({ where: { id: prodId } });
+      if (products.length > 0) {
+        return products;
+      }
+      return 0;
     })
     .then(products => {
       let product;
@@ -128,7 +132,7 @@ exports.postCartDeleteProduct = (req, res, next) => {
   req.user
     .getCart()
     .then(cart => {
-      return cart.getProducts({ where: {id : prodId}}) //7506218677
+      return cart.getProducts({ where: {id : prodId}})
     })
     .then(products => {
       const product = products[0];

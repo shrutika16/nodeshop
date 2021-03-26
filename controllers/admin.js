@@ -1,4 +1,4 @@
-const Product = require('../models/product');
+const models = require('../models');
 
 exports.getProducts = (req, res, next) => { 
     // Product.findAll()
@@ -48,7 +48,7 @@ exports.getEditProduct = (req, res, next) => {
         return res.redirect('/');
     }
     const prodId = req.params.productId;
-    Product.findByPk(prodId)
+    models.Product.findByPk(prodId)
     .then(product => {
       res.render('admin/edit-product', {
         product: product,
@@ -69,7 +69,7 @@ exports.editProduct = (req, res, next) => {
     const updatedImageUrl = req.body.imageUrl;
     const updatedPrice = req.body.price;
 
-  Product.findByPk(prodId)
+  models.Product.findByPk(prodId)
     .then(product => {
       product.title = updatedTitle;
       product.description = updatedDescription;
@@ -90,7 +90,7 @@ exports.editProduct = (req, res, next) => {
 
 exports.deleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-    Product.findByPk(prodId)
+    models.Product.findByPk(prodId)
     .then(product => {
       return product.destroy();
     }).then(result => {

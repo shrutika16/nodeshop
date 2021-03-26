@@ -6,7 +6,8 @@ const sequalize = new Sequalize(
     '',
     {
         dialect: 'mysql',
-        host: 'localhost'
+        host: 'localhost',
+        // logging: false,
     }
 );
 
